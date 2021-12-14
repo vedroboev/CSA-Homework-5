@@ -2,18 +2,19 @@
 #include "people.h"
 
 void *Barber::cutHair(Customer customer) {
-    std::cout << "Cutting hair of customer "  << customer.name << "...";
+    printf("Cutting hair of customer %s...", customer.name);
+    sleep(1);
     return nullptr;
 }
 void *Customer::enterShop() {
-    std::cout << "Customer "  << name << " entering shop...";
+    printf("Customer %s entering shop...", name);
     return nullptr;
 }
 void *Customer::getHairCut() {
-    std::cout << "Customer " << name << " is getting his hair cut...";
+    printf("Customer %s is getting his hair cut...", name);
     return nullptr;
 }
 void *Customer::leaveShop() {
-    std::cout << "Customer " << name << " is leaving the shop...";
+    printf("Customer %s is leaving the shop...", name);
     return nullptr;
 }

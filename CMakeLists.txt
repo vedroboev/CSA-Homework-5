@@ -7,7 +7,9 @@ set(BUILD_DIR "${CMAKE_BINARY_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $"{BUILD_DIR}/../bin")
 set(SOURCE_FILES
         people.h
+        barbershop.h
 
+        barbershop.cpp
         people.cpp
         main.cpp)
 

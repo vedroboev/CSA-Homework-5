@@ -1,7 +1,8 @@
 #ifndef CSA_HOMEWORK_5__PEOPLE_H_
 #define CSA_HOMEWORK_5__PEOPLE_H_
 
-#include <iostream>
+#include "stdio.h"  // NOLINT(modernize-deprecated-headers)
+#include "unistd.h"
 
 class Customer {
 public:
