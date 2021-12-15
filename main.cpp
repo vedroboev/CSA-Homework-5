@@ -17,16 +17,21 @@ pthread_mutex_t cutting;
 pthread_mutex_t sleeping;
 
 void getHaircut() {
-    printf("Haircut for customer %d started...", total_customer_count);
+    printf("Haircut for customer %d started...\n", total_customer_count);
     // Picking a random haircut time.
     int time = rand() % 10 + 1; // NOLINT
     // Waiting unlit haircut end.
     sleep(time);
-    printf("Haircut for customer %d finished! Total time: %d.", total_customer_count, time);
+    printf("Haircut for customer %d finished! Total time: %d.\n", total_customer_count, time);
+    pthread_mutex_unlock(&cutting);
+}
+
+void cutHair(){
+    pthread_mutex_lock(&cutting);
 }
 
 void barber(void* parameter) {
-    printf("test");
+    printf("test\n");
     while (total_customer_count < 100){
         // Sleeping until a customer appears.
         sem_wait(&customers_waiting);
@@ -40,6 +45,7 @@ void barber(void* parameter) {
         // Unlocking modification and making barber available.
         pthread_mutex_unlock(&incrementing);
         pthread_mutex_unlock(&cutting);
+        cutHair();
     }
 }
 void *customer(void* parameter) {
