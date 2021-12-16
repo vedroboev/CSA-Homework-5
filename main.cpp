@@ -5,6 +5,9 @@ int main() {
     pthread_mutex_init(&incrementing, nullptr);
     pthread_mutex_init(&cutting, nullptr);
     pthread_mutex_init(&busy, nullptr);
+    pthread_mutex_init(&leaving, nullptr);
+    pthread_mutex_lock(&leaving);
+    pthread_mutex_lock(&busy);
 
     // Creating customers.
     pthread_t customers[3];

@@ -18,6 +18,7 @@ extern sem_t customers_waiting;
 extern pthread_mutex_t incrementing;
 extern pthread_mutex_t cutting;
 extern pthread_mutex_t busy;
+extern pthread_mutex_t leaving;
 
 void cutHair();
 
