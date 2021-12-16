@@ -14,7 +14,7 @@ sem_t customers_waiting;
 
 pthread_mutex_t incrementing;
 pthread_mutex_t cutting;
-pthread_mutex_t sleeping;
+pthread_mutex_t busy;
 
 void getHaircut() {
     printf("Haircut for customer %d started...\n", total_customer_count);
@@ -26,12 +26,7 @@ void getHaircut() {
     pthread_mutex_unlock(&cutting);
 }
 
-void cutHair(){
-    pthread_mutex_lock(&cutting);
-}
-
 void barber(void* parameter) {
-    printf("test\n");
     while (total_customer_count < 100){
         // Sleeping until a customer appears.
         sem_wait(&customers_waiting);
@@ -41,11 +36,14 @@ void barber(void* parameter) {
         // Incrementing total visitor count, decrementing the number of people in the waiting room.
         waiting_room_customer_count--;
         total_customer_count++;
-
         // Unlocking modification and making barber available.
         pthread_mutex_unlock(&incrementing);
-        pthread_mutex_unlock(&cutting);
-        cutHair();
+
+        // Make the barber available.
+        pthread_mutex_unlock(&busy);
+        // Lock the cutting mutex and cut the customer's hair.
+        pthread_mutex_lock(&cutting);
+        getHaircut();
     }
 }
 void *customer(void* parameter) {
@@ -56,11 +54,12 @@ void *customer(void* parameter) {
         waiting_room_customer_count++;
         // Unlocking modification and incrementing waiting line.
         pthread_mutex_unlock(&incrementing);
+
+        // Posting to the line (which indicates that there's a customer available).
         sem_post(&customers_waiting);
+
         // Waiting until the barber is available.
-        pthread_mutex_lock(&cutting);
-        // Getting the haircut.
-        getHaircut();
+        pthread_mutex_lock(&busy);
     }
 }
 
@@ -68,6 +67,7 @@ int main() {
     sem_init(&customers_waiting, 0, 0);
     pthread_mutex_init(&incrementing, nullptr);
     pthread_mutex_init(&cutting, nullptr);
+    pthread_mutex_init(&busy, nullptr);
 
     // Creating customers.
     pthread_t customers[10];
