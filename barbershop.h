@@ -1,28 +1,27 @@
 #ifndef CSA_HOMEWORK_5__BARBERSHOP_H_
 #define CSA_HOMEWORK_5__BARBERSHOP_H_
 
-#include "pthread.h"
-#include "semaphore.h"
+#include "stdio.h" // NOLINT
 #include "stdlib.h" // NOLINT
 #include "unistd.h"
+#include "semaphore.h"
+#include "pthread.h"
 
+extern const int max_customer_count;
+extern const int haircut_time_bound;
 
-class Barbershop {
-private:
-    int average_cutting_time;
-    int total_customer_count;
-    int waiting_room_count;
-    sem_t customers_waiting;
-    pthread_mutex_t cutting;
-    pthread_mutex_t incrementing;
-public:
-    explicit Barbershop(int average_cutting_time);
+extern int total_customer_count;
+extern int waiting_room_customer_count;
 
-    void *barber();
-    void *customer();
+extern sem_t customers_waiting;
 
-    void cutHair();
-    void getHaircut();
-};
+extern pthread_mutex_t incrementing;
+extern pthread_mutex_t cutting;
+extern pthread_mutex_t busy;
+
+void cutHair();
+
+void *barber(void *parameter);
+void *customer(void *parameter);
 
 #endif //CSA_HOMEWORK_5__BARBERSHOP_H_

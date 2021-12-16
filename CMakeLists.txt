@@ -8,6 +8,9 @@ set(CMAKE_CXX_FLAGS -pthread)
 set(BUILD_DIR "${CMAKE_BINARY_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $"{BUILD_DIR}/../bin")
 set(SOURCE_FILES
+        barbershop.h
+        barbershop.cpp
+
         main.cpp)
 
 add_executable(CSA_Homework_5 ${SOURCE_FILES})
