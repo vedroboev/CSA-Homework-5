@@ -14,7 +14,7 @@ int main() {
         printf("Error: customer count must be a number and must be in range 1, %d. Try again:\n", CUSTOMER_LIMIT);
     }
 
-    printf("Please, enter the average duration of the haircut:\n");
+    printf("Please, enter the maximum duration of the haircut:\n");
     while (scanf("%d", &haircut_time_bound) != 1 || haircut_time_bound <= 0 // NOLINT
         || haircut_time_bound >= day_duration) { // NOLINT
         printf("Haircut duration must be a positive number and be less that the length of the day. Try again:\n");
