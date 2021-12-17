@@ -96,6 +96,10 @@ void getHaircut(int customer_index) {
 
 // Barber thread function.
 void *barber(void *parameter) {
+    time_t begin;
+    time_t end;
+    time(&begin);
+
     // Main body loop, doing this until the working day ends (we'll serve the latest customer even after closing).
     while (true) {
         // Sleeping until a customer appears.
@@ -121,7 +125,10 @@ void *barber(void *parameter) {
 
         // Waiting until the customer is done.
         pthread_mutex_lock(&leaving);
-        if(total_customer_count < daily_customer_count){
+
+        // Checking break condition.
+        time(&end);
+        if(difftime(end, begin) > day_duration || total_customer_count >= daily_customer_count){
             break;
         }
     }
