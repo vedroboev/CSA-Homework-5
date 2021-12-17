@@ -37,7 +37,7 @@ pthread_mutex_t leaving;
 //----------------------------------------------------------------------------------------------------------------------
 
 // Initializes semaphore and mutex variables.
-void initializeSemaphores(){
+void initializeSemaphores() {
     sem_init(&customers_waiting, 0, 0);
     pthread_mutex_init(&incrementing, nullptr);
     pthread_mutex_init(&cutting, nullptr);
@@ -49,12 +49,12 @@ void initializeSemaphores(){
 }
 
 // Handles the creation and the generation of new customers throughout the day.
-void generateCustomers(){
+void generateCustomers() {
     pthread_t customers[CUSTOMER_LIMIT];
 
     // Getting the maximum wait time between new customers arriving.
     int wait_time = day_duration / daily_customer_count;
-    if(wait_time == 0) ++wait_time;
+    if (wait_time == 0) ++wait_time;
 
     // Creating new customers with a random interval between them.
     for (int i = 0; i < daily_customer_count; ++i) {
@@ -128,7 +128,7 @@ void *barber(void *parameter) {
 
         // Checking break condition.
         time(&end);
-        if(difftime(end, begin) > day_duration || total_customer_count >= daily_customer_count){
+        if (difftime(end, begin) > day_duration || total_customer_count >= daily_customer_count) {
             break;
         }
     }
