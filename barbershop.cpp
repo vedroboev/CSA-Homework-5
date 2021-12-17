@@ -5,8 +5,12 @@
 // VARIABLES.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Limit constants.
+const int CUSTOMER_LIMIT = 50;
+const int DAY_DURATION_LIMIT = 300;
+
 // Max customer count and the upper limit to a haircut duration, day duration.
-const int max_customer_count = 50;
+int daily_customer_count = 10;
 // These are measured in seconds.
 int haircut_time_bound = 10;
 int day_duration = 120;
@@ -29,7 +33,7 @@ pthread_mutex_t busy;
 pthread_mutex_t leaving;
 
 //----------------------------------------------------------------------------------------------------------------------
-// UTILITY METHODS.
+// INITIALIZERS, GENERATORS.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Initializes semaphore and mutex variables.
@@ -43,6 +47,25 @@ void initializeSemaphores(){
     pthread_mutex_lock(&leaving);
     pthread_mutex_lock(&busy);
 }
+
+// Handles the creation and the generation of new customers throughout the day.
+void generateCustomers(){
+    pthread_t customers[CUSTOMER_LIMIT];
+
+    // Getting the maximum wait time between new customers arriving.
+    int wait_time = day_duration / daily_customer_count;
+    if(wait_time == 0) ++wait_time;
+
+    // Creating new customers with a random interval between them.
+    for (int i = 0; i < daily_customer_count; ++i) {
+        pthread_create(&customers[i], nullptr, customer, nullptr);
+        sleep(rand() % wait_time); // NOLINT
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// UTILITY FUNCTIONS.
+//----------------------------------------------------------------------------------------------------------------------
 
 // Utility for working with cutting the customer's hair.
 void cutHair() {
@@ -73,13 +96,8 @@ void getHaircut(int customer_index) {
 
 // Barber thread function.
 void *barber(void *parameter) {
-    // Keeping track of time.
-    time_t start, end;
-    time(&start);
-    time(&end);
-
     // Main body loop, doing this until the working day ends (we'll serve the latest customer even after closing).
-    while (difftime(end, start) < day_duration) {
+    while (true) {
         // Sleeping until a customer appears.
         sem_wait(&customers_waiting);
 
@@ -103,7 +121,11 @@ void *barber(void *parameter) {
 
         // Waiting until the customer is done.
         pthread_mutex_lock(&leaving);
+        if(total_customer_count < daily_customer_count){
+            break;
+        }
     }
+    printf("[BARBER] Working day has ended! Bye everyone!\n");
     return nullptr;
 }
 

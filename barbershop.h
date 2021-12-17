@@ -11,8 +11,10 @@
 
 // VARIABLES.
 
-extern const int max_customer_count;
+extern const int CUSTOMER_LIMIT;
+extern const int DAY_DURATION_LIMIT;
 
+extern int daily_customer_count;
 extern int haircut_time_bound;
 extern int day_duration;
 extern int total_customer_count;
@@ -28,6 +30,7 @@ extern pthread_mutex_t busy;
 extern pthread_mutex_t leaving;
 
 void initializeSemaphores();
+void generateCustomers();
 
 // UTILITY METHODS.
 
